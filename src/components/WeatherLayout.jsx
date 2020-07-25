@@ -9,7 +9,6 @@ import Box from "@material-ui/core/Box";
 import CardContent from "@material-ui/core/CardContent";
 import Clock from "react-live-clock";
 import RightLayout from "./WeatherLayout2";
-import ReactAnimatedWeather from "react-animated-weather";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -27,9 +26,9 @@ const useStyles = makeStyles(() => ({
     alignContent: "center",
     justify: "center",
     width: "65%",
-    height: "80%",
+    height: "85%",
     // overflowY: screenMD ? "auto" : "hidden",
-    overflow: "hidden",
+    // overflow: "hidden",
     // borderRadius: "10px",
     backgroundColor: "rgba(0, 0, 0, 0.73)",
     color: "#fff",
@@ -50,27 +49,113 @@ const useStyles = makeStyles(() => ({
 }));
 function WeatherLayout() {
   const classes = useStyles();
+  var query = "bangalore";
+  // const [query, setQuery] = useState("");
+  const [error, setError] = useState("");
   const [icon, setIcon] = useState(
     "CLEAR_DAY"
     //   {
     //   icon: "CLEAR_DAY",
     // }
   );
+  const [weather, setWeather] = useState({
+    country: null,
+    name: null,
+    temp: null,
+    weather_description: "",
+    min_temp: null,
+    max_temp: null,
+    wind_speed: null,
+    feels: null,
+    humidity: null,
+    visibility: null,
+
+    // lat: null,
+    // lon: null,
+    smallIcons: null,
+  });
   useEffect(() => {
-    get_Weather();
+    // get_Weather();
     // getCurrentLocation();
     // timerID = setInterval(() => get_Weather(weather.lat, weather.lon), 600000);
-
     // clearInterval(timerID);
   }, []);
+  useEffect(() => {
+    switch (weather.weather_description) {
+      case "Haze":
+        setIcon({ icon: "CLEAR_DAY" });
+        break;
+      case "Clouds":
+        setIcon({ icon: "CLOUDY" });
+        break;
+      case "Rain":
+        setIcon({ icon: "RAIN" });
+        break;
+      case "Snow":
+        setIcon({ icon: "SNOW" });
+        break;
+      case "Dust":
+        setIcon({ icon: "WIND" });
+        break;
+      case "Drizzle":
+        setIcon({ icon: "SLEET" });
+        break;
+      case "Fog":
+        setIcon({ icon: "FOG" });
+        break;
+      case "Smoke":
+        setIcon({ icon: "FOG" });
+        break;
+      case "Tornado":
+        setIcon({ icon: "WIND" });
+        break;
+      default:
+        setIcon({ icon: "CLEAR_DAY" });
+    }
+  }, [weather]);
   const Api_Key = "b30252d5438a93f2f32926b3a20905c3";
-  const get_Weather = async () => {
+
+  const get_Weather = async (e) => {
     const api_Call = await fetch(
-      `http://api.openweathermap.org/data/2.5/weather?q=Bangalore,IN&appid=${Api_Key}`
+      `http://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${Api_Key}`
       // `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${Api_Key}`
     );
     const response = await api_Call.json();
-    const item = response;
+    // const response = {
+    //   coord: { lon: -0.13, lat: 51.51 },
+    //   weather: [
+    //     {
+    //       id: 300,
+    //       main: "Drizzle",
+    //       description: "light intensity drizzle",
+    //       icon: "09d",
+    //     },
+    //   ],
+    //   base: "stations",
+    //   main: {
+    //     temp: 280.32,
+    //     pressure: 1012,
+    //     humidity: 81,
+    //     temp_min: 279.15,
+    //     temp_max: 281.15,
+    //   },
+    //   visibility: 10000,
+    //   wind: { speed: 4.1, deg: 80 },
+    //   clouds: { all: 90 },
+    //   dt: 1485789600,
+    //   sys: {
+    //     type: 1,
+    //     id: 5091,
+    //     message: 0.0103,
+    //     country: "GB",
+    //     sunrise: 1485762037,
+    //     sunset: 1485794875,
+    //   },
+    //   id: 2643743,
+    //   name: "London",
+    //   cod: 200,
+    // };
+    // setQuery("");
     setWeather({
       name: response.name,
       country: response.sys.country,
@@ -81,74 +166,24 @@ function WeatherLayout() {
       wind_speed: response.wind.speed,
       feels: calcCelui(response.main.feels_like),
       humidity: response.main.humidity,
+      smallIcons: response.weather[0].icon,
+      visibility: response.visibility,
       // lat: lat,
       // lon: lon,
     });
-    console.log(item, "asfiopu");
+
+    console.log(response, "asfiopu");
     // console.log(weather.lat, "latudu");
-    // switch (weather.weather_description) {
-    //   case "Haze":
-    //     setIcon({ icon: "CLEAR_DAY" });
-    //     break;
-    //   case "Clouds":
-    //     setIcon({ icon: "CLOUDY" });
-    //     break;
-    //   case "Rain":
-    //     setIcon({ icon: "RAIN" });
-    //     break;
-    //   case "Snow":
-    //     setIcon({ icon: "SNOW" });
-    //     break;
-    //   case "Dust":
-    //     setIcon({ icon: "WIND" });
-    //     break;
-    //   case "Drizzle":
-    //     setIcon({ icon: "SLEET" });
-    //     break;
-    //   case "Fog":
-    //     setIcon({ icon: "FOG" });
-    //     break;
-    //   case "Smoke":
-    //     setIcon({ icon: "FOG" });
-    //     break;
-    //   case "Tornado":
-    //     setIcon({ icon: "WIND" });
-    //     break;
-    //   default:
-    //     setIcon({ icon: "CLEAR_DAY" });
-
-    // }
-
-    if (weather.weather_description == "Haze") {
-      setIcon("CLEAR_DAY");
-    } else if (weather.weather_description == "Clouds") {
-      setIcon("CLOUDY");
-    } else {
-      setIcon("CLEAR_DAY");
-    }
   };
-  const [weather, setWeather] = useState({
-    country: null,
-    name: null,
-    temp: null,
-    weather_description: "",
-    min_temp: null,
-    max_temp: null,
-    wind_speed: null,
-    feels: null,
-    // lat: null,
-    // lon: null,
-  });
-
+  const key = (e) => {
+    // setQuery(e.target.value);
+    query = e.target.value;
+  };
   const calcCelui = (temp) => {
     let cel = Math.floor(temp - 273.15);
     return cel;
   };
-  const defaults = {
-    color: "#fff",
-    size: 112,
-    animate: true,
-  };
+
   const maxminTemp = (min, max) => {
     if (max && min) {
       return (
@@ -250,7 +285,6 @@ function WeatherLayout() {
                 <Grid
                   container
                   direction="column" */}
-
               {/* > */}
 
               <Box
@@ -259,10 +293,7 @@ function WeatherLayout() {
                 style={{ paddingRight: "2em", marginTop: "2em" }}
               >
                 {/* {weather.weather_description} */}
-                <Typography variant="h3">
-                  {weather.name}
-                  {weather.weather_description}
-                </Typography>
+                <Typography variant="h3">{weather.name}</Typography>
 
                 {/* {maxminTemp(weather.min_temp, weather.max_temp)}
                   <p>{weather.wind_speed}</p> */}
@@ -273,21 +304,12 @@ function WeatherLayout() {
                 // p={1}
                 style={{ paddingRight: "2em" }}
               >
-                <Typography variant="h3">
-                  {weather.country}
-                  {icon}
-                  <ReactAnimatedWeather
-                    icon={icon}
-                    color={defaults.color}
-                    size={defaults.size}
-                    animate={defaults.animate}
-                  />
-                </Typography>
+                <Typography variant="h3">{weather.country}</Typography>
               </Box>
               <Box
                 display="flex"
-                style={{ paddingRight: "1em", marginTop: "15em" }}
-                bgcolor="red"
+                style={{ paddingRight: "1em", marginTop: "20em" }}
+
                 // justifyContent="flex-end"
               >
                 <Box flexGrow={1} className={classes.TimeSize}>
@@ -316,8 +338,6 @@ function WeatherLayout() {
                   <Typography variant="h1">{weather.temp}&deg;c</Typography>
                 </Box>
               </Box>
-              {/* </Grid>
-              </Grid> */}
             </CardContent>
           </Grid>
           <Grid
@@ -332,8 +352,18 @@ function WeatherLayout() {
             // xs={6}
           >
             <RightLayout
-            // icon={weather.icon}
-            // description={weather.weather_description}
+              icon={icon.icon}
+              description={weather.weather_description}
+              name={weather.name}
+              country={weather.country}
+              smallIcons={weather.smallIcons}
+              Temperature={weather.temp}
+              humidity={weather.humidity}
+              visibility={weather.visibility}
+              wind={weather.wind_speed}
+              loadweather={get_Weather}
+              keyword={query}
+              skeyword={key}
             />
           </Grid>
         </Grid>
