@@ -51,9 +51,10 @@ function WeatherLayout2(props) {
         />
         <div className="img-box">
           {" "}
-          <button onClick={props.loadweather}>
-            <img src="https://images.avishkaar.cc/workflow/newhp/search-white.png" />
-          </button>
+          <img
+            src="https://images.avishkaar.cc/workflow/newhp/search-white.png"
+            onClick={props.loadweather}
+          />
         </div>
       </Box>
       <Box

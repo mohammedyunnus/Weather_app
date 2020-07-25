@@ -49,8 +49,8 @@ const useStyles = makeStyles(() => ({
 }));
 function WeatherLayout() {
   const classes = useStyles();
-  var query = "bangalore";
-  // const [query, setQuery] = useState("");
+  // var query = "bangalore";
+  const [query, setQuery] = useState("");
   const [error, setError] = useState("");
   const [icon, setIcon] = useState(
     "CLEAR_DAY"
@@ -75,7 +75,8 @@ function WeatherLayout() {
     smallIcons: null,
   });
   useEffect(() => {
-    // get_Weather();
+    getLocation();
+    get_Weather();
     // getCurrentLocation();
     // timerID = setInterval(() => get_Weather(weather.lat, weather.lon), 600000);
     // clearInterval(timerID);
@@ -116,68 +117,106 @@ function WeatherLayout() {
   const Api_Key = "b30252d5438a93f2f32926b3a20905c3";
 
   const get_Weather = async (e) => {
-    const api_Call = await fetch(
-      `http://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${Api_Key}`
-      // `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${Api_Key}`
-    );
-    const response = await api_Call.json();
-    // const response = {
-    //   coord: { lon: -0.13, lat: 51.51 },
-    //   weather: [
-    //     {
-    //       id: 300,
-    //       main: "Drizzle",
-    //       description: "light intensity drizzle",
-    //       icon: "09d",
-    //     },
-    //   ],
-    //   base: "stations",
-    //   main: {
-    //     temp: 280.32,
-    //     pressure: 1012,
-    //     humidity: 81,
-    //     temp_min: 279.15,
-    //     temp_max: 281.15,
-    //   },
-    //   visibility: 10000,
-    //   wind: { speed: 4.1, deg: 80 },
-    //   clouds: { all: 90 },
-    //   dt: 1485789600,
-    //   sys: {
-    //     type: 1,
-    //     id: 5091,
-    //     message: 0.0103,
-    //     country: "GB",
-    //     sunrise: 1485762037,
-    //     sunset: 1485794875,
-    //   },
-    //   id: 2643743,
-    //   name: "London",
-    //   cod: 200,
-    // };
-    // setQuery("");
-    setWeather({
-      name: response.name,
-      country: response.sys.country,
-      temp: calcCelui(response.main.temp),
-      weather_description: response.weather[0].main,
-      min_temp: calcCelui(response.main.temp_min),
-      max_temp: calcCelui(response.main.temp_max),
-      wind_speed: response.wind.speed,
-      feels: calcCelui(response.main.feels_like),
-      humidity: response.main.humidity,
-      smallIcons: response.weather[0].icon,
-      visibility: response.visibility,
-      // lat: lat,
-      // lon: lon,
-    });
+    if (query != "") {
+      const api_Call = await fetch(
+        `http://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${Api_Key}`
+        // `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${Api_Key}`
+      );
+      const response = await api_Call.json();
+      // const response = {
+      //   coord: { lon: -0.13, lat: 51.51 },
+      //   weather: [
+      //     {
+      //       id: 300,
+      //       main: "Drizzle",
+      //       description: "light intensity drizzle",
+      //       icon: "09d",
+      //     },
+      //   ],
+      //   base: "stations",
+      //   main: {
+      //     temp: 280.32,
+      //     pressure: 1012,
+      //     humidity: 81,
+      //     temp_min: 279.15,
+      //     temp_max: 281.15,
+      //   },
+      //   visibility: 10000,
+      //   wind: { speed: 4.1, deg: 80 },
+      //   clouds: { all: 90 },
+      //   dt: 1485789600,
+      //   sys: {
+      //     type: 1,
+      //     id: 5091,
+      //     message: 0.0103,
+      //     country: "GB",
+      //     sunrise: 1485762037,
+      //     sunset: 1485794875,
+      //   },
+      //   id: 2643743,
+      //   name: "London",
+      //   cod: 200,
+      // };
+      setQuery("");
+      let resp_code = parseInt(response.cod);
 
-    console.log(response, "asfiopu");
-    // console.log(weather.lat, "latudu");
+      if (!(resp_code >= 400 && resp_code <= 499)) {
+        setWeather({
+          name: response.name,
+          country: response.sys.country,
+          temp: calcCelui(response.main.temp),
+          weather_description: response.weather[0].main,
+          min_temp: calcCelui(response.main.temp_min),
+          max_temp: calcCelui(response.main.temp_max),
+          wind_speed: response.wind.speed,
+          feels: calcCelui(response.main.feels_like),
+          humidity: response.main.humidity,
+          smallIcons: response.weather[0].icon,
+          visibility: response.visibility,
+          // lat: lat,
+          // lon: lon,
+        });
+      } else if (resp_code == 404) {
+        alert("Not Found");
+      } else {
+        alert("Something Went Wrong");
+      }
+
+      console.log(response, "asfiopu");
+      // console.log(weather.lat, "latudu");
+    }
+  };
+
+  const getLocation = (_callback) => {
+    navigator.geolocation.getCurrentPosition(async function (position) {
+      console.log("Latitude is :", position.coords.latitude);
+      console.log("Longitude is :", position.coords.longitude);
+      var lat = position.coords.latitude;
+      var lon = position.coords.longitude;
+      console.log(lat, "laaa");
+      if (lat != "" && lon != "") {
+        const api_key1 = "45d2893054feb7";
+        const api_Call = await fetch(
+          `https://eu1.locationiq.com/v1/reverse.php?key=${api_key1}&lat=${lat}&lon=${lon}&format=json`
+        );
+        const response = await api_Call.json();
+        console.log("geo", response);
+        if (
+          response.address.city != "" &&
+          response.hasOwnProperty("address") &&
+          response.address.hasOwnProperty("city")
+        ) {
+          setQuery(response.address.city);
+
+          // return response.address.city;
+        }
+      }
+    });
+    return "bangalore";
   };
   const key = (e) => {
-    // setQuery(e.target.value);
-    query = e.target.value;
+    setQuery(e.target.value);
+    // query = e.target.value;
   };
   const calcCelui = (temp) => {
     let cel = Math.floor(temp - 273.15);
