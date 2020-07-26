@@ -2,6 +2,11 @@ import React from "react";
 import ReactAnimatedWeather from "react-animated-weather";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
+import SearchIcon from "@material-ui/icons/Search";
+import MyLocationIcon from "@material-ui/icons/MyLocation";
+import HomeIcon from "@material-ui/icons/Home";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -41,20 +46,44 @@ function WeatherLayout2(props) {
         }}
       />
       <Box style={{ marginTop: "8px" }} className="search-box">
+        <div className="img-box">
+          {" "}
+          <IconButton>
+            <Tooltip title={props.currhome} arrow>
+              <HomeIcon style={{ color: "white" }} onClick={props.home} />
+            </Tooltip>
+          </IconButton>
+        </div>
         <input
           type="text"
           className="search-bar"
           placeholder="Search any city"
-          onChange={props.skeyword}
+          onChange={props.mkey}
           value={props.keyword}
           // name="city"
         />
         <div className="img-box">
           {" "}
-          <img
-            src="https://images.avishkaar.cc/workflow/newhp/search-white.png"
-            onClick={props.loadweather}
-          />
+          <IconButton color="primary">
+            <Tooltip title="Search" arrow>
+              <SearchIcon
+                style={{ color: "white" }}
+                id={props.keyword}
+                onClick={props.skeyword}
+              />
+            </Tooltip>
+          </IconButton>
+        </div>
+        <div className="img-box">
+          {" "}
+          <IconButton>
+            <Tooltip title="Weather at current city" arrow>
+              <MyLocationIcon
+                style={{ color: "white" }}
+                onClick={props.location}
+              />
+            </Tooltip>
+          </IconButton>
         </div>
       </Box>
       <Box
@@ -118,7 +147,7 @@ function WeatherLayout2(props) {
         alignItems="center"
       >
         <Box flexGrow={1}> Visibility </Box>
-        <Box flexGrow={1}>{props.visibility}mi</Box>
+        <Box flexGrow={1}>{props.visibility} mi</Box>
       </Box>
       <Divider
         variant="middle"
@@ -135,7 +164,24 @@ function WeatherLayout2(props) {
         alignItems="center"
       >
         <Box flexGrow={1}> Wind Speed </Box>
-        <Box flexGrow={1}>{props.wind}km/h</Box>
+        <Box flexGrow={1}>{props.wind} km/h</Box>
+      </Box>
+      <Divider
+        variant="middle"
+        orientation="horizontal"
+        style={{
+          backgroundColor: "#fff",
+          marginTop: "2px",
+        }}
+      />
+      <Box
+        display="flex"
+        className={classes.Text}
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Box flexGrow={1}> Feels Like </Box>
+        <Box flexGrow={1}>{props.feels}°c</Box>
       </Box>
     </div>
   );

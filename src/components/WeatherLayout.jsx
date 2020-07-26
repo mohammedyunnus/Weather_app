@@ -1,14 +1,32 @@
 import React, { useState, useEffect } from "react";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import { Typography, useMediaQuery } from "@material-ui/core";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Background from "../assests/background.jpg";
-import city from "../assests/city.jpg";
+import haze from "../assests/haze.jpg";
+import cloudy from "../assests/cloudy.jpg";
+import rainy from "../assests/rainy.jpg";
+import snowy from "../assests/snowy.jpg";
+import dusty from "../assests/dusty.jpg";
+import drizzle from "../assests/drizzle.jpg";
+import fog from "../assests/fog.jpg";
+import mist from "../assests/mist.jpg";
+import smoke from "../assests/smoke.jpg";
+import sandy from "../assests/sandy.jpg";
+import ash from "../assests/ash.jpg";
+import squall from "../assests/squall.jpg";
+import torndao from "../assests/tornado.jpg";
+import thunderstorm from "../assests/thunderstorm.jpg";
+import clearday from "../assests/clearday.jpg";
 import Card from "@material-ui/core/Card";
 import Box from "@material-ui/core/Box";
 import CardContent from "@material-ui/core/CardContent";
 import Clock from "react-live-clock";
 import RightLayout from "./WeatherLayout2";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
+import Hidden from "@material-ui/core/Hidden";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -28,13 +46,13 @@ const useStyles = makeStyles(() => ({
     width: "65%",
     height: "85%",
     // overflowY: screenMD ? "auto" : "hidden",
-    // overflow: "hidden",
+    overflow: "hidden",
     // borderRadius: "10px",
     backgroundColor: "rgba(0, 0, 0, 0.73)",
     color: "#fff",
   },
   backgroundLeft: {
-    backgroundImage: `url(${city})`,
+    backgroundImage: `url(${mist})`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     height: "-webkit-fill-available",
@@ -48,9 +66,20 @@ const useStyles = makeStyles(() => ({
   },
 }));
 function WeatherLayout() {
+  const [wImage, setWImage] = useState("");
+
+  const theme = useTheme();
+
   const classes = useStyles();
   // var query = "bangalore";
-  const [query, setQuery] = useState("");
+  let my_home =
+    localStorage.getItem("my_home") !== null
+      ? localStorage.getItem("my_home")
+      : "";
+  const [query, setQuery] = useState(my_home);
+  // localStorage.setItem("my_home",)
+  const [mirror_query, setMirrorQuery] = useState("");
+  const [current_home, setCurrHome] = useState(my_home);
   const [error, setError] = useState("");
   const [icon, setIcon] = useState(
     "CLEAR_DAY"
@@ -58,6 +87,7 @@ function WeatherLayout() {
     //   icon: "CLEAR_DAY",
     // }
   );
+  const screenMD = useMediaQuery(theme.breakpoints.down("md"));
   const [weather, setWeather] = useState({
     country: null,
     name: null,
@@ -72,46 +102,86 @@ function WeatherLayout() {
 
     // lat: null,
     // lon: null,
-    smallIcons: null,
+    smallIcons: undefined,
   });
   useEffect(() => {
     getLocation();
-    get_Weather();
+    // get_Weather();
     // getCurrentLocation();
     // timerID = setInterval(() => get_Weather(weather.lat, weather.lon), 600000);
     // clearInterval(timerID);
   }, []);
   useEffect(() => {
+    get_Weather();
+    // getCurrentLocation();
+    // timerID = setInterval(() => get_Weather(weather.lat, weather.lon), 600000);
+    // clearInterval(timerID);
+  }, [query]);
+  useEffect(() => {
     switch (weather.weather_description) {
-      case "Haze":
-        setIcon({ icon: "CLEAR_DAY" });
-        break;
       case "Clouds":
         setIcon({ icon: "CLOUDY" });
+        setWImage(cloudy);
         break;
       case "Rain":
         setIcon({ icon: "RAIN" });
+        setWImage(rainy);
         break;
       case "Snow":
         setIcon({ icon: "SNOW" });
-        break;
-      case "Dust":
-        setIcon({ icon: "WIND" });
+        setWImage(snowy);
         break;
       case "Drizzle":
         setIcon({ icon: "SLEET" });
+        setWImage(drizzle);
+        break;
+      case "Dust":
+        setIcon({ icon: "FOG" });
+        setWImage(dusty);
+        break;
+      case "Haze":
+        setIcon({ icon: "FOG" });
+        setWImage(haze);
         break;
       case "Fog":
         setIcon({ icon: "FOG" });
+        setWImage(fog);
         break;
       case "Smoke":
         setIcon({ icon: "FOG" });
+        setWImage(smoke);
+        break;
+      case "Sand":
+        setIcon({ icon: "FOG" });
+        setWImage(sandy);
+        break;
+      case "Ash":
+        setIcon({ icon: "FOG" });
+        setWImage(ash);
+        break;
+      case "Squall":
+        setIcon({ icon: "FOG" });
+        setWImage(squall);
+        break;
+      case "Mist":
+        setIcon({ icon: "FOG" });
+        setWImage(mist);
         break;
       case "Tornado":
         setIcon({ icon: "WIND" });
+        setWImage(torndao);
+        break;
+      case "Thunderstorm":
+        setIcon({ icon: "RAIN" });
+        setWImage(thunderstorm);
+        break;
+      case "Clear":
+        setIcon({ icon: "CLEAR_DAY" });
+        setWImage(clearday);
         break;
       default:
         setIcon({ icon: "CLEAR_DAY" });
+        setWImage(clearday);
     }
   }, [weather]);
   const Api_Key = "b30252d5438a93f2f32926b3a20905c3";
@@ -123,46 +193,13 @@ function WeatherLayout() {
         // `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${Api_Key}`
       );
       const response = await api_Call.json();
-      // const response = {
-      //   coord: { lon: -0.13, lat: 51.51 },
-      //   weather: [
-      //     {
-      //       id: 300,
-      //       main: "Drizzle",
-      //       description: "light intensity drizzle",
-      //       icon: "09d",
-      //     },
-      //   ],
-      //   base: "stations",
-      //   main: {
-      //     temp: 280.32,
-      //     pressure: 1012,
-      //     humidity: 81,
-      //     temp_min: 279.15,
-      //     temp_max: 281.15,
-      //   },
-      //   visibility: 10000,
-      //   wind: { speed: 4.1, deg: 80 },
-      //   clouds: { all: 90 },
-      //   dt: 1485789600,
-      //   sys: {
-      //     type: 1,
-      //     id: 5091,
-      //     message: 0.0103,
-      //     country: "GB",
-      //     sunrise: 1485762037,
-      //     sunset: 1485794875,
-      //   },
-      //   id: 2643743,
-      //   name: "London",
-      //   cod: 200,
-      // };
-      setQuery("");
+
       let resp_code = parseInt(response.cod);
 
       if (!(resp_code >= 400 && resp_code <= 499)) {
+        setQuery("");
         setWeather({
-          name: response.name,
+          name: convertString(response.name),
           country: response.sys.country,
           temp: calcCelui(response.main.temp),
           weather_description: response.weather[0].main,
@@ -173,13 +210,11 @@ function WeatherLayout() {
           humidity: response.main.humidity,
           smallIcons: response.weather[0].icon,
           visibility: response.visibility,
-          // lat: lat,
-          // lon: lon,
         });
       } else if (resp_code == 404) {
-        alert("Not Found");
+        alert("No city found!");
       } else {
-        alert("Something Went Wrong");
+        alert("Something Went Wrong, try again!");
       }
 
       console.log(response, "asfiopu");
@@ -187,7 +222,7 @@ function WeatherLayout() {
     }
   };
 
-  const getLocation = (_callback) => {
+  const getLocation = async () => {
     navigator.geolocation.getCurrentPosition(async function (position) {
       console.log("Latitude is :", position.coords.latitude);
       console.log("Longitude is :", position.coords.longitude);
@@ -202,21 +237,40 @@ function WeatherLayout() {
         const response = await api_Call.json();
         console.log("geo", response);
         if (
-          response.address.city != "" &&
           response.hasOwnProperty("address") &&
           response.address.hasOwnProperty("city")
         ) {
-          setQuery(response.address.city);
-
-          // return response.address.city;
+          if (response.address.city != "") {
+            setQuery(response.address.city);
+          }
         }
       }
     });
-    return "bangalore";
+    if (weather.name === null) {
+      if (query === "") setQuery("Bangalore");
+    } else {
+      alert("Something Went Wrong While fetching location!");
+    }
   };
-  const key = (e) => {
-    setQuery(e.target.value);
-    // query = e.target.value;
+  const key = (q) => {
+    setQuery(q.target.id);
+  };
+  const mkey = (e) => {
+    setMirrorQuery(e.target.value);
+  };
+  const goHome = (e) => {
+    if (
+      localStorage.getItem("my_home") !== null &&
+      localStorage.getItem("my_home") !== ""
+    ) {
+      setQuery(localStorage.getItem("my_home"));
+    }
+  };
+  const setHome = (e) => {
+    if (weather.name !== "" && weather.name !== undefined) {
+      localStorage.setItem("my_home", weather.name);
+      setCurrHome(weather.name);
+    }
   };
   const calcCelui = (temp) => {
     let cel = Math.floor(temp - 273.15);
@@ -232,6 +286,30 @@ function WeatherLayout() {
         </h3>
       );
     }
+  };
+
+  const convertString = (phrase) => {
+    var returnString = phrase;
+    //Convert Characters
+    returnString = returnString.replace("ö", "o");
+    returnString = returnString.replace("ç", "c");
+    returnString = returnString.replace("ş", "s");
+    returnString = returnString.replace("ı", "i");
+    returnString = returnString.replace("ğ", "g");
+    returnString = returnString.replace("ü", "u");
+    returnString = returnString.replace("ū", "u");
+
+    // if there are other invalid chars, convert them into blank spaces
+    // returnString = returnString.replace(/[^a-z0-9\s-]/g, "");
+    // convert multiple spaces and hyphens into one space
+
+    // trims current string
+
+    // cuts string (if too long)
+
+    // add hyphens
+
+    return returnString;
   };
   // function getPosition(position) {
   //   x.innerHTML =
@@ -306,79 +384,103 @@ function WeatherLayout() {
       alignItems="center"
       justify="center"
     >
-      <Card className={classes.card}>
+      <Card
+        className={classes.card}
+        style={{ overflowY: screenMD ? "auto" : "hidden" }}
+      >
         <Grid container direction="row">
-          <Grid
-            item
-            container
-            className={classes.backgroundLeft}
-            // alignItems="center"
-            direction="column"
-            // xl={5}
-            lg={7}
-            md={7}
-            // xs={6}
-          >
-            <CardContent>
-              {/* <Grid item>
+          <Hidden only={["sm", "xs", "md"]}>
+            <Grid
+              item
+              container
+              className={classes.backgroundLeft}
+              style={{ backgroundImage: `url(${wImage})` }}
+              // alignItems="center"
+              direction="column"
+              // xl={5}
+              lg={7}
+              md={6}
+              // xs={6}
+            >
+              <CardContent>
+                {/* <Grid item>
                 <Grid
                   container
                   direction="column" */}
-              {/* > */}
+                {/* > */}
 
-              <Box
-                display="flex"
-                justifyContent="flex-end"
-                style={{ paddingRight: "2em", marginTop: "2em" }}
-              >
-                {/* {weather.weather_description} */}
-                <Typography variant="h3">{weather.name}</Typography>
+                <Box
+                  display="flex"
+                  justifyContent="flex-end"
+                  style={{ paddingRight: "2em", marginTop: "2em" }}
+                >
+                  {/* {weather.weather_description} */}
 
-                {/* {maxminTemp(weather.min_temp, weather.max_temp)}
+                  <Typography variant="h3">
+                    {weather.name},{weather.country}
+                  </Typography>
+                  <div className="img-box">
+                    <IconButton>
+                      <Tooltip
+                        open={true}
+                        title="Set as home"
+                        placement="right"
+                        arrow
+                      >
+                        <LocationOnIcon
+                          style={{ color: "white" }}
+                          onClick={setHome}
+                        />
+                      </Tooltip>
+                    </IconButton>
+                  </div>
+
+                  {/* {maxminTemp(weather.min_temp, weather.max_temp)}
                   <p>{weather.wind_speed}</p> */}
-              </Box>
-              <Box
+                </Box>
+                {/* <Box
                 display="flex"
                 justifyContent="flex-end"
                 // p={1}
                 style={{ paddingRight: "2em" }}
               >
                 <Typography variant="h3">{weather.country}</Typography>
-              </Box>
-              <Box
-                display="flex"
-                style={{ paddingRight: "1em", marginTop: "20em" }}
-
-                // justifyContent="flex-end"
-              >
-                <Box flexGrow={1} className={classes.TimeSize}>
-                  <Box
-
-                  // flexGrow={1}
-                  >
-                    <Clock
-                      format="HH:mm:ss"
-                      // className={classes.TimeSize}
-                      interval={1000}
-                      ticking={true}
-                    />
-                  </Box>
-                  {dateBuilder(new Date())}
-                </Box>
+              </Box> */}
                 <Box
-                // display="flex"
-                // justifyContent="flex-end"
-                // alignItems="flex-end"
-                // p={1}
+                  display="flex"
+                  style={{ paddingRight: "1em", marginTop: "20em" }}
 
-                // alignContent="flex-end"
-                // bgcolor="red"
+                  // justifyContent="flex-end"
                 >
-                  <Typography variant="h1">{weather.temp}&deg;c</Typography>
+                  <Box flexGrow={1} className={classes.TimeSize}>
+                    <Box
+
+                    // flexGrow={1}
+                    >
+                      <Clock
+                        format="HH:mm:ss"
+                        // className={classes.TimeSize}
+                        interval={1000}
+                        ticking={true}
+                      />
+                    </Box>
+                    {dateBuilder(new Date())}
+                  </Box>
+                  <Box
+                  // display="flex"
+                  // justifyContent="flex-end"
+                  // alignItems="flex-end"
+                  // p={1}
+
+                  // alignContent="flex-end"
+                  // bgcolor="red"
+                  >
+                    <Typography variant="h1">{weather.temp}&deg;c</Typography>
+                  </Box>
                 </Box>
-              </Box>
-            </CardContent>
-          </Grid>
+              </CardContent>
+            </Grid>
+          </Hidden>
           <Grid
             item
             container
@@ -387,7 +489,7 @@ function WeatherLayout() {
             // justify="flex-start"
             // xl={7}
             lg={5}
-            md
+            md={6}
             // xs={6}
           >
             <RightLayout
@@ -401,8 +503,13 @@ function WeatherLayout() {
               visibility={weather.visibility}
               wind={weather.wind_speed}
               loadweather={get_Weather}
-              keyword={query}
+              keyword={mirror_query}
               skeyword={key}
+              mkey={mkey}
+              location={getLocation}
+              home={goHome}
+              currhome={current_home}
+              feels={weather.feels}
             />
           </Grid>
         </Grid>
