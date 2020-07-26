@@ -1,0 +1,42 @@
+{
+  "files": {
+    "main.css": "/Weather_app/static/css/main.fc897fe4.chunk.css",
+    "main.js": "/Weather_app/static/js/main.980bdd58.chunk.js",
+    "main.js.map": "/Weather_app/static/js/main.980bdd58.chunk.js.map",
+    "runtime-main.js": "/Weather_app/static/js/runtime-main.7f5b2566.js",
+    "runtime-main.js.map": "/Weather_app/static/js/runtime-main.7f5b2566.js.map",
+    "static/css/2.74eb8124.chunk.css": "/Weather_app/static/css/2.74eb8124.chunk.css",
+    "static/js/2.7e0dde04.chunk.js": "/Weather_app/static/js/2.7e0dde04.chunk.js",
+    "static/js/2.7e0dde04.chunk.js.map": "/Weather_app/static/js/2.7e0dde04.chunk.js.map",
+    "index.html": "/Weather_app/index.html",
+    "precache-manifest.24e480e59e6d4f2dbc0e5aeb60a6c987.js": "/Weather_app/precache-manifest.24e480e59e6d4f2dbc0e5aeb60a6c987.js",
+    "service-worker.js": "/Weather_app/service-worker.js",
+    "static/css/2.74eb8124.chunk.css.map": "/Weather_app/static/css/2.74eb8124.chunk.css.map",
+    "static/css/main.fc897fe4.chunk.css.map": "/Weather_app/static/css/main.fc897fe4.chunk.css.map",
+    "static/js/2.7e0dde04.chunk.js.LICENSE.txt": "/Weather_app/static/js/2.7e0dde04.chunk.js.LICENSE.txt",
+    "static/media/ash.jpg": "/Weather_app/static/media/ash.21d711e1.jpg",
+    "static/media/background.jpg": "/Weather_app/static/media/background.75e0f8ca.jpg",
+    "static/media/clearday.jpg": "/Weather_app/static/media/clearday.423447b8.jpg",
+    "static/media/cloudy.jpg": "/Weather_app/static/media/cloudy.bbd925ef.jpg",
+    "static/media/drizzle.jpg": "/Weather_app/static/media/drizzle.a7b89a72.jpg",
+    "static/media/dusty.jpg": "/Weather_app/static/media/dusty.72123cfe.jpg",
+    "static/media/fog.jpg": "/Weather_app/static/media/fog.4aad9ad8.jpg",
+    "static/media/haze.jpg": "/Weather_app/static/media/haze.767b205f.jpg",
+    "static/media/mist.jpg": "/Weather_app/static/media/mist.4615eb8d.jpg",
+    "static/media/rainy.jpg": "/Weather_app/static/media/rainy.62215a7f.jpg",
+    "static/media/index.css": "/Weather_app/static/media/roboto-latin-900-normal.bb1e4dc6.woff",
+    "static/media/sandy.jpg": "/Weather_app/static/media/sandy.4bcc8cc0.jpg",
+    "static/media/smoke.jpg": "/Weather_app/static/media/smoke.76b80e99.jpg",
+    "static/media/snowy.jpg": "/Weather_app/static/media/snowy.6b87759a.jpg",
+    "static/media/squall.jpg": "/Weather_app/static/media/squall.952566fc.jpg",
+    "static/media/thunderstorm.jpg": "/Weather_app/static/media/thunderstorm.59158a9b.jpg",
+    "static/media/tornado.jpg": "/Weather_app/static/media/tornado.1d3d018f.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.7f5b2566.js",
+    "static/css/2.74eb8124.chunk.css",
+    "static/js/2.7e0dde04.chunk.js",
+    "static/css/main.fc897fe4.chunk.css",
+    "static/js/main.980bdd58.chunk.js"
+  ]
+}
