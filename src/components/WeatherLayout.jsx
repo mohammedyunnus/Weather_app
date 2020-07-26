@@ -189,7 +189,7 @@ function WeatherLayout() {
   const get_Weather = async (e) => {
     if (query != "") {
       const api_Call = await fetch(
-        `http://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${Api_Key}`
+        `https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${Api_Key}`
         // `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${Api_Key}`
       );
       const response = await api_Call.json();
