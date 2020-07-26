@@ -1,4 +1,17 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# About
+
+Weather live is a web based realtime weather app. Thanks to Open Weather API for providing the realtime weather data.
+
+You can checkout a demo straight into your browser just [`click here`](https://mohammedyunnus.github.io/Weather_app/).
+
+Wanna download into your system, feel free to do so. First clone the repository in your system.
+
+**_Note that to use the application in your system first, get the API key from [`openweatherapi`](https://openweathermap.org/) and put that API_KEY in place of `YOUR_API_KEY_HERE` present inside the weatherApp.js file which is present in the project directory._**
+
+```bash
+git clone https://github.com/mohammedyunnus/Weather_app.git
+cd Weather_App
+```
 
 ## Available Scripts
 
